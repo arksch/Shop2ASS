@@ -28,8 +28,8 @@ with no leading and trailing paranthesis in the same lines. Then call
     
 Note that counting starts with zero and each last line is not included.
 
-How to start the ASS solver?
-----------------------------
+How to start the ASS?
+---------------------
 
 This script only runs semi-automatically.
 You will have to alter some of the output to apply to Gringo/Clasp logic and syntax.
