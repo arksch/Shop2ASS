@@ -230,7 +230,8 @@ class Operator(Commands):
         # added_state(arm(C), T):- currentTask(unstack, (C, D), T).
         # added_state(clear(D), T):- currentTask(unstack, (C, D), T).
         # action(unstack, (C, D), T, T + 1, 1):- currentTask(unstack, (C, D), T).
-        return_str = self.name_to_ass() + self.variables_to_ass() + self.prerequisites_to_ass()
+        doc_str = '%%%%%% Operator: ' + self.operator_name + ' %%%%%% \n\n'
+        return_str = doc_str + self.name_to_ass() + self.variables_to_ass() + self.prerequisites_to_ass()
         for del_state in self.deleted_states:
             return_str += 'deleted_state(%s, T) :- %s.\n' % (state_list_to_ass(del_state, var_dict=self.variables_dict),
                                                              self.current_task_string)
@@ -331,7 +332,7 @@ def main(input, output, atoms, initials, goals):
     trans = Lisp2Ass()
 
     script_folder = os.path.split(__file__)[0]
-    with open(os.path.join(script_folder,'stub.lp', 'r')) as f_in:
+    with open(os.path.join(script_folder,'stub.lp'), 'r') as f_in:
         stub = f_in.read()
 
     ## Translate atoms, initial states and goals
@@ -364,6 +365,10 @@ def main(input, output, atoms, initials, goals):
         for hcl in horn_clauses:
             f_out.write(trans.horn_clause(hcl))
     ## Find Operators
+    with open(output, 'a') as f_out:
+        op_doc = '\n%%%%%%%%%%%%%\n'
+        op_doc += '% Operators %\n'
+        op_doc += '%%%%%%%%%%%%%\n\n'
     operators = parse_lisp(lisp_code, ':operator')
     for op in operators:
         click.echo(op)
@@ -380,7 +385,7 @@ def main(input, output, atoms, initials, goals):
         else:
             prerequisites = []
         with open(output, 'a') as f_out:
-            f_out.write(trans.operator(op, variable_domains=variables, prerequisites=prerequisites))
+            f_out.write(trans.operator(op, variable_domains=variables, prerequisites=prerequisites) + '\n')
 
 if __name__ == '__main__':
     main()
