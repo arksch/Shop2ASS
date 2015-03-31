@@ -20,8 +20,7 @@ state(X, T+1) :- time(T), added_state(X, T).
 
 %%%!!! YOU WILL HAVE TO CHANGE THIS GUESSING TO GET ACCEPTABLE PERFORMANCE !!!%%%
 
-1 {curTask(Op, T) : operator(Op)} 1 :- time(T), not_finished(T).
-1 {currentTask(Op, Var, T) : operator_prerequisite(Op, Var, T) } 1 :- curTask(Op, T).
+1 {currentTask(Op, Var, T) : operator_prerequisite(Op, Var, T), operator(Op) } 1 :- time(T), not_finished(T).
 #minimize{C, T : action(Op, Var, T, TT, C)}.
 
 %%%%%%%%%%%%%%%%

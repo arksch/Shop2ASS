@@ -1,4 +1,9 @@
-from Shop2ASS import conversion
+'''
+A test file for the conversion script from Lisp code with a SHOP2 file to ASP code
+Run by
+    $ py.test test_conversion.py
+'''
+import conversion
 
 __author__ = 'arkadi'
 # This code is to test the conversion.py script
@@ -28,4 +33,6 @@ def test_horn_clause_class():
     lisp_str = '(:- (p (f ?x)) ((q ?x c) (r ?y d) (s d))))'
     ass_string = 'p(f(X)) :- q(X, c), r(Y, d), s(d).\n'
     assert conversion.HornClause().lisp_to_ass(lisp_str) == ass_string
-
+    lisp_str = '(:- (place X) (depot X))'
+    ass_string = 'place(X) :- depot(X).\n'
+    assert conversion.HornClause().lisp_to_ass(lisp_str) == ass_string

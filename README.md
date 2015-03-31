@@ -28,6 +28,11 @@ with no leading and trailing paranthesis in the same lines. Then call
     
 Note that counting starts with zero and each last line is not included.
 
+Feel free to change the script to include more edge cases of the SHOP system.
+You can test that you did not break anything
+
+    $ py.test test_conversion.py
+
 How to start the ASS?
 ---------------------
 

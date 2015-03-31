@@ -1,10 +1,13 @@
 ''' This script stores some methods to convert SHOP files into CLASP files
 
 You might have to run
-pip install click
+    $ pip install click
 
 Call the script by typing
-python conversion.py --help
+    $ python conversion.py --help
+
+When you changed it, test it with
+    $ py.test test_conversion.py
 
 For questions ask
 arkadi.schelling@gmail.com
@@ -34,6 +37,15 @@ def strip_bad_characters(text):
     text = re.sub(':-', '<HORN>', text)
     text = re.sub('[!-]', '', text)
     text = re.sub('<HORN>', ':-', text)
+    # The Lisp command nil is just ()
+    text = re.sub('nil', '()', text)
+    return text
+
+def strip_search_commands(text):
+    # SHOP has some search optimization going on, that cannot be translated to ASP
+    list_of_search_commands = [':first', ':all', ':shallowest', ':all-shallowest', ':id-first', ':id-all']
+    for command in list_of_search_commands:
+        text = text.replace(command, '')
     return text
 
 def strip_comments(text):
@@ -43,6 +55,7 @@ def strip_comments(text):
 def clear_text(text):
     # Clears text from Lisp specifics, so it can be parsed by gringo and clasp
     text = strip_comments(text)
+    text = strip_search_commands(text)
     text = convert_variables(text)
     text = strip_bad_characters(text)
     return text
@@ -104,7 +117,13 @@ class HornClause(Commands):
         return_str = ''
         length = len(horn_clause_list)
         head = horn_clause_list[1]
+
         tail_list = horn_clause_list[2:]
+        # When there is only one argument Lisp drops a bracket: (:- (place ?x) (depot ?x))
+        # instead of (:- (place ?x) ((depot ?x)))
+        if not isinstance(tail_list[0][0], list):
+            tail_list = [tail_list]
+
         tail_strings = []
         for tail in tail_list:
             body_strings = []
@@ -246,6 +265,9 @@ class Operator(Commands):
 
 
 class Lisp2Ass():
+    """
+    Once you have a short Lisp string that represents one SHOP function, this class can translate it to ASP
+    """
 
     def horn_clause(self, lisp_string):
         return HornClause().command_list_to_ass(get_list_of_commands(convert_variables(lisp_string))[0])
@@ -369,6 +391,7 @@ def main(input, output, atoms, initials, goals):
         op_doc = '\n%%%%%%%%%%%%%\n'
         op_doc += '% Operators %\n'
         op_doc += '%%%%%%%%%%%%%\n\n'
+        f_out.write(op_doc)
     operators = parse_lisp(lisp_code, ':operator')
     for op in operators:
         click.echo(op)
