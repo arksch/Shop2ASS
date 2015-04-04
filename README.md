@@ -45,7 +45,7 @@ Once you have tuned the output of the main problem and the problem's instance yo
 Note that this will not run fast, since the included stub only performs a very dumb guessing.
 To test the bad performance you can run the example file
 
-    $ ./path/to/gringo Shop_solutions/block_test_runtime.lp | ./path/to/clasp 0
+    $ ./path/to/gringo Shop_solutions/blocks_test_runtime.lp | ./path/to/clasp 0
 
 To improve the solving speed you should look at the Shop methods and probably include some additional goals and states.
 
