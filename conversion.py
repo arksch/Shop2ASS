@@ -121,7 +121,7 @@ class HornClause(Commands):
         tail_list = horn_clause_list[2:]
         # When there is only one argument Lisp drops a bracket: (:- (place ?x) (depot ?x))
         # instead of (:- (place ?x) ((depot ?x)))
-        if not isinstance(tail_list[0][0], list):
+        if len(tail_list[0]) > 0 and not isinstance(tail_list[0][0], list):
             tail_list = [tail_list]
 
         tail_strings = []
@@ -385,6 +385,8 @@ def main(input, output, atoms, initials, goals):
         ## Find Horn Clauses
         horn_clauses = parse_lisp(lisp_code, ':- ')
         for hcl in horn_clauses:
+            #import ipdb; ipdb.set_trace()
+            #print hcl
             f_out.write(trans.horn_clause(hcl))
     ## Find Operators
     with open(output, 'a') as f_out:

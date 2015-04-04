@@ -24,7 +24,7 @@ Note that this script does not translate *:methods*, yet.
 For translating problem descriptions try to have all atoms, initial states and goals in one block each,
 with no leading and trailing paranthesis in the same lines. Then call
 
-    $ python conversion input_file output_file --atoms startline:endline --initials startline:endline --goals startline:endline
+    $ python conversion.py input_file output_file --atoms startline:endline --initials startline:endline --goals startline:endline
     
 Note that counting starts with zero and each last line is not included.
 
@@ -43,6 +43,10 @@ Once you have tuned the output of the main problem and the problem's instance yo
     $ ./path/to/gringo problem instance | ./path/to/clasp 0
 
 Note that this will not run fast, since the included stub only performs a very dumb guessing.
-To improve the solving you should look at the Shop methods and probably include some additional goals and states.
+To test the bad performance you can run the example file
+
+    $ ./path/to/gringo Shop_solutions/block_test_runtime.lp | ./path/to/clasp 0
+
+To improve the solving speed you should look at the Shop methods and probably include some additional goals and states.
 
 For questions write me a mail.
